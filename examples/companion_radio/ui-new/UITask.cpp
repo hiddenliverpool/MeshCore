@@ -1094,12 +1094,19 @@ char UITask::checkDisplayOn(char c) {
 }
 
 char UITask::handleLongPress(char c) {
-  if (millis() - ui_started_at < 8000) {   // long press in first 8 seconds since startup -> CLI/rescue
+  if (millis() - ui_started_at < 8000) { // long press in first 8 seconds since startup -> CLI/rescue
     the_mesh.enterCLIRescue();
-    c = 0;   // consume event
+    c = 0; // consume event
+  } else {
+    while (isButtonPressed()) {
+      delay(10); // wait for button release so it doesn't immediately wake back up
+    }
+    shutdown();
+    c = 0;
   }
   return c;
 }
+
 
 char UITask::handleDoubleClick(char c) {
   MESH_DEBUG_PRINTLN("UITask: double-click triggered");
