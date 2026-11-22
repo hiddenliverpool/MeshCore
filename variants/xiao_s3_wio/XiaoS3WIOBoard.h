@@ -25,8 +25,7 @@ public:
   }
 
   uint16_t getBattMilliVolts() override {
-    analogReadResolution(12);
-    uint32_t mv = analogReadMilliVolts(1); // GPIO 1 (A0/D0)
-    return mv * 2; // Multiply by 2 for the 1:1 voltage divider
+    uint32_t raw = analogRead(1); // GPIO 1 (A0/D0)
+    return (raw * 3300 * 2) / 4095; // 12-bit ADC (0-4095) * 3.3V * 2 (1:1 divider)
   }
 };
