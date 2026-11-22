@@ -23,4 +23,10 @@ public:
     esp_sleep_enable_ext0_wakeup(GPIO_NUM_21, 0);
     esp_deep_sleep_start();
   }
+
+  uint16_t getBattMilliVolts() override {
+    analogReadResolution(12);
+    uint32_t mv = analogReadMilliVolts(1); // GPIO 1 (A0/D0)
+    return mv * 2; // Multiply by 2 for the 1:1 voltage divider
+  }
 };
